@@ -1,31 +1,16 @@
-DTC_INCLUDE += $(srctree)/../sm6450-modules/qcom/opensource/camera-kernel
+# Use current $(MSM_ARCH) to set config/ makefile path
+CAMERA_TARGET_MKFILE_PATH := $(CAMERA_DEVICETREE_ROOT)/config/$(MSM_ARCH).mk
+# Check to see if current target makefile exists
+CAMERA_TARGET_EXISTS := $(or $(and $(wildcard $(CAMERA_TARGET_MKFILE_PATH)),y),n)
 
-ifeq ($(CONFIG_ARCH_CANOE), y)
-include $(srctree)/$(src)/config/canoe.mk
-endif
-
-ifeq ($(CONFIG_ARCH_KALAMA), y)
-include $(srctree)/$(src)/config/kalama.mk
-endif
-
-ifeq ($(CONFIG_ARCH_PARROT), y)
-include $(srctree)/$(src)/config/parrot.mk
-endif
-
-ifeq ($(CONFIG_ARCH_PINEAPPLE), y)
-ifeq ($(CONFIG_ARCH_QTI_VM), y)
-include $(srctree)/$(src)/config/pineapple_tuivm.mk
+# Since Kernel SI can support multiple ARCH's this allows only the current selected target ARCH
+# to compile.
+ifeq ($(CAMERA_TARGET_EXISTS), y)
+include $(CAMERA_TARGET_MKFILE_PATH)
 else
-include $(srctree)/$(src)/config/pineapple.mk
-endif
-endif
-
-ifeq ($(CONFIG_ARCH_SUN), y)
-include $(srctree)/$(src)/config/sun.mk
-endif
-
-ifeq ($(CONFIG_ARCH_WAIPIO), y)
-include $(srctree)/$(src)/config/waipio.mk
+# Print a warning but do not throw an error to allow bring-up of new targets!
+$(warning [$(MODNAME)] $(MSM_ARCH) is not a valid target, make sure config\ folder contains a makefile named $(MSM_ARCH).mk)
+$(warning [$(MODNAME)] driver is NOT being enabled!)
 endif
 
 always-y	:= $(dtbo-y) $(dtb-y)

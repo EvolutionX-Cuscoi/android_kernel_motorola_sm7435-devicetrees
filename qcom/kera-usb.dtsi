@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 /*
- * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #include <dt-bindings/clock/qcom,gcc-kera.h>
@@ -41,13 +41,9 @@
 		qcom,core-clk-rate = <200000000>;
 		qcom,core-clk-rate-hs = <66666667>;
 		qcom,core-clk-rate-disconnected = <133333333>;
-		qcom,pm-qos-latency = <2>;
 
 		qcom,use-pdc-interrupts;
 		qcom,use-eusb2-phy;
-
-		extcon = <&eud>;
-		usb-role-switch;
 
 		interconnect-names = "usb-ddr", "usb-ipa", "ddr-usb";
 		interconnects = <&aggre1_noc MASTER_USB3_0 &mc_virt SLAVE_EBI1>,
@@ -63,14 +59,6 @@
 			0x144 /* GSI_RING_BASE_ADDR_H */
 			0x1a4>; /* GSI_IF_STS */
 
-		qcom,interconnect-values-nom = /* NOMINAL Votes */
-			<1000000 4500000>,
-			<0 2400>,
-			<0 40000>;
-		qcom,interconnect-values-svs = /* SVS Votes */
-			<240000 700000>,
-			<0 2400>,
-			<0 40000>;
 
 		dummy-supply = <&apps_smmu>;
 
@@ -85,7 +73,7 @@
 			dma-coherent;
 
 			interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-			usb-phy = <&eusb2_phy0>, <&usb_qmp_dp_phy>;
+			usb-phy = <&usb_nop_phy>, <&usb_qmp_dp_phy>;
 			snps,disable-clk-gating;
 			snps,has-lpm-erratum;
 			snps,hird-threshold = /bits/ 8 <0x0>;
@@ -95,16 +83,9 @@
 			snps,dis_u2_susphy_quirk;
 			snps,ssp-u3-u0-quirk;
 			tx-fifo-resize;
-			num-hc-interrupters = /bits/ 16 <3>;
-			dr_mode = "otg";
+			dr_mode = "peripheral";
 			maximum-speed = "super-speed-plus";
 			usb-role-switch;
-		};
-
-		port {
-			usb_port0: endpoint {
-				remote-endpoint = <&usb_port0_connector>;
-			};
 		};
 	};
 
@@ -133,10 +114,6 @@
 
 		resets = <&gcc GCC_QUSB2PHY_PRIM_BCR>;
 		reset-names = "phy_reset";
-
-		/* eUSB2 HPG version 1.0.2 update */
-		qcom,param-override-seq =
-			<0x00 0x58>;
 	};
 
 	usb_nop_phy: usb_nop_phy {
@@ -169,9 +146,6 @@
 		resets = <&gcc GCC_USB3_DP_PHY_PRIM_BCR>,
 			<&gcc GCC_USB3_PHY_PRIM_BCR>;
 		reset-names = "global_phy_reset", "phy_reset";
-
-		pinctrl-names = "default";
-		pinctrl-0 = <&usb3phy_portselect_default>;
 
 		qcom,qmp-phy-reg-offset =
 			<USB3_DP_PCS_PCS_STATUS1

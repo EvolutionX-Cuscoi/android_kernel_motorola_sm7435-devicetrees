@@ -29,8 +29,10 @@ dtbo-y += nxp/parrot-nfc.dtbo \
 endif
 
 ifeq ($(CONFIG_ARCH_RAVELIN),y)
-dtbo-y += nxp/ravelin-nfc.dtbo
-dtbo-y += nxp/montague-hsp-idp-nfc.dtbo
+dtbo-y += nxp/ravelin-nfc.dtbo \
+          nxp/ravelin-nfc-qrd.dtbo \
+          nxp/ravelin-nfc-idp.dtbo \
+          nxp/ravelin-nfc-atp.dtbo
 endif
 
 ifeq ($(CONFIG_MONA_DTB),y)
@@ -39,10 +41,6 @@ endif
 
 ifeq ($(CONFIG_MONAI_DTB),y)
 dtbo-y += st/parrot-monai-nfc.dtbo
-endif
-
-ifeq ($(CONFIG_LAMY_DTB),y)
-dtbo-y += st/parrot-lamy-nfc.dtbo
 endif
 
 always-y        := $(dtb-y) $(dtbo-y)

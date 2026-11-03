@@ -1,4 +1,4 @@
-# Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+# Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
 # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 %YAML 1.2
 ---
@@ -169,7 +169,7 @@ properties:
    qcom,mhi:
      description: phandle to indicate the device which needs MHI support.
 
-   qcom,wlan-tsf-gpio:
+   qcom,cap-tsf-gpio:
      description: |
        WLAN_TSF_CAPTURED GPIO signal specified by the chip
        specifications, should be drived depending on products.
@@ -230,16 +230,6 @@ properties:
        enable to resolve PMU power up issues. Provide BT GPIO using
        this config param.
 
-   qcom,sw-ctrl-data-0-gpio:
-     description: |
-       GPIO signal for software control data 0 functionality.
-       Used for WLAN device control operations.
-
-   qcom,sw-ctrl-data-1-gpio:
-     description: |
-       GPIO signal for software control data 1 functionality.
-       Used for WLAN device control operations.
-
    qcom,same-dt-multi-dev:
      description: |
        Boolean property to decide whether it supports
@@ -267,62 +257,10 @@ properties:
        Boolean property to decide whether
        platform name required.
 
-   fig-direct-cx:
-     description: |
-       Boolean property to decide whether chip is fig before device id is
-       determined during PCIe enumeration.
-
-   cx-mode:
-     description: |
-       Indicates the required method to handle the CX rail.
-
-   cx-reg-name:
-     description: |
-       Name of the CX regulator.
-
-   cnss-direct-cx-host-sol-init-gpio:
-     description: |
-       Repurposed Host SOL GPIO pin to be used during power on and
-       power off for fig.
-
-   qcom,pmic-auto-headroom:
-     description: |
-       Integer value specifying the amount of headroom adjustment in millivolts
-       to subtract during open loop CPR voltage update.
-
-   qcom,wake-voltage-drop-adjustment:
-     description: |
-       Integer value specifying the amount of voltage drop adjustment in
-       millivolts to add for the wake voltage during open loop CPR
-       voltage update.
-
-   qcom,sleep-voltage-drop-adjustment:
-     description: |
-       Integer value specifying the amount of voltage drop adjustment in
-       millivolts to add for the sleep voltage during open loop CPR
-       voltage update.
-
    chip_cfg@X:
      description: represent chip specific configurations
      enum:
        -supported-ids #U32 array to decide which device ids are supported by sub node.
-
-   nvmem-cells:
-     description: |
-       Contains a list of phandles (references) to the NVMEM cells.
-       Each entry points to a specific memory cell defined elsewhere
-       in the DTS file.
-
-   nvmem-cell-names:
-     description: |
-       Provides a list of names corresponding to the NVMEM cells
-       referenced in nvmem-cells. These names are used to identify
-       the cells in the driver code.
-
-   wcal-pbs-supply:
-     description: |
-       PBS regulator on which clients can vote to trigger the PBS
-       sequence.
 
 required:
   - compatible
@@ -350,7 +288,7 @@ examples:
         qcom,wlan-rc-num = <0>;
         qcom,wlan-smmu-iova-address = <0 0x10000000>;
         qcom,mhi = <&mhi_wlan>;
-        qcom,wlan-tsf-gpio = <&tlmm 126 1>;
+        qcom,cap-tsf-gpio = <&tlmm 126 1>;
     };
 
     wlan: qcom,cnss-qca6490@b0000000 {
@@ -419,3 +357,4 @@ examples:
 	};
     };
 ...
+

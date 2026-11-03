@@ -4,14 +4,7 @@ endif
 
 ifeq ($(CONFIG_ARCH_TUNA),y)
 dtbo-y += tuna-wcn7750-bt.dtbo
-dtbo-y += tuna-wcn7750-no-L6K.dtbo
 dtbo-y += tuna-kiwi-bt.dtbo
-endif
-
-ifeq ($(CONFIG_ARCH_KERA), y)
-dtbo-y += kera-qca6750-bt.dtbo
-dtbo-y += kera-qca6750-bt-qmb.dtbo
-dtbo-y += kera-wcn7750-bt.dtbo
 endif
 
 ifeq ($(CONFIG_ARCH_SUN), y)
@@ -40,22 +33,16 @@ ifeq ($(CONFIG_MONAI_DTB),y)
 dtbo-y += parrot-monai-bt.dtbo
 endif
 
-ifeq ($(CONFIG_PORTOV_DTB),y)
-dtbo-y += parrot-portov-bt.dtbo
-endif
-
-ifeq ($(CONFIG_MUMBA_DTB),y)
-dtbo-y += parrot-mumba-bt.dtbo
-endif
-
 ifeq ($(CONFIG_CUSCO_DTB),y)
 dtbo-y += parrot-cuscoi-bt.dtbo
+dtbo-y += parrot-cuscoi-noi-bt.dtbo
 endif
 
-ifeq ($(CONFIG_LAMY_DTB),y)
-dtbo-y += parrot-lamy-bt.dtbo
+ifeq ($(CONFIG_PAROS_DTB),y)
+dtbo-y += parrot-paros-bt.dtbo
 endif
 
 always-y        := $(dtb-y) $(dtbo-y)
 subdir-y        := $(dts-dirs)
 clean-files     := *.dtb *.dtbo
+

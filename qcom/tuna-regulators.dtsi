@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 /*
- * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #include <dt-bindings/regulator/qcom,rpmh-regulator-levels.h>
@@ -13,27 +13,22 @@
 		S1B: pmxr2230_s1: vreg-pmxr2230-s1 {
 			regulator-name = "pmxr2230_s1";
 			qcom,set = <RPMH_REGULATOR_SET_ALL>;
-			regulator-min-microvolt = <1840000>;
+			regulator-min-microvolt = <1856000>;
 			regulator-max-microvolt = <2104000>;
-			qcom,init-voltage = <1840000>;
+			qcom,init-voltage = <1856000>;
 		};
 	};
 
 	rpmh-regulator-smpb2 {
 		compatible = "qcom,rpmh-vrm-regulator";
 		qcom,resource-name = "smpb2";
-		qcom,regulator-type = "pmic5-ftsmps";
-		qcom,supported-modes = <RPMH_REGULATOR_MODE_RET
-					RPMH_REGULATOR_MODE_HPM>;
-		qcom,mode-threshold-currents = <0 50000>;
 
 		S2B: pmxr2230_s2: vreg-pmxr2230-s2 {
 			regulator-name = "pmxr2230_s2";
 			qcom,set = <RPMH_REGULATOR_SET_ALL>;
-			regulator-min-microvolt = <1240000>;
+			regulator-min-microvolt = <1256000>;
 			regulator-max-microvolt = <1408000>;
-			qcom,init-voltage = <1240000>;
-			qcom,init-mode = <RPMH_REGULATOR_MODE_RET>;
+			qcom,init-voltage = <1256000>;
 		};
 	};
 
@@ -44,7 +39,7 @@
 		S3B: pmxr2230_s3: vreg-pmxr2230-s3 {
 			regulator-name = "pmxr2230_s3";
 			qcom,set = <RPMH_REGULATOR_SET_ALL>;
-			regulator-min-microvolt = <750000>;
+			regulator-min-microvolt = <880000>;
 			regulator-max-microvolt = <1040000>;
 			qcom,init-voltage = <952000>;
 		};
@@ -958,10 +953,9 @@
 		qcom,resource-name = "ldog2";
 		qcom,regulator-type = "pmic5-ldo";
 		qcom,supported-modes =
-			<RPMH_REGULATOR_MODE_RET
-			 RPMH_REGULATOR_MODE_LPM
+			<RPMH_REGULATOR_MODE_LPM
 			 RPMH_REGULATOR_MODE_HPM>;
-		qcom,mode-threshold-currents = <0 10000 30000>;
+		qcom,mode-threshold-currents = <0 30000>;
 
 		L2G: pm_v6g_l2: vreg-pm_v6g-l2 {
 			regulator-name = "pm_v6g_l2";
@@ -969,7 +963,7 @@
 			regulator-min-microvolt = <1200000>;
 			regulator-max-microvolt = <1200000>;
 			qcom,init-voltage = <1200000>;
-			qcom,init-mode = <RPMH_REGULATOR_MODE_LPM>;
+			qcom,init-mode = <RPMH_REGULATOR_MODE_HPM>;
 			regulator-always-on;
 		};
 	};
@@ -979,10 +973,9 @@
 		qcom,resource-name = "ldog3";
 		qcom,regulator-type = "pmic5-ldo";
 		qcom,supported-modes =
-			<RPMH_REGULATOR_MODE_RET
-			 RPMH_REGULATOR_MODE_LPM
+			<RPMH_REGULATOR_MODE_LPM
 			 RPMH_REGULATOR_MODE_HPM>;
-		qcom,mode-threshold-currents = <0 10000 30000>;
+		qcom,mode-threshold-currents = <0 30000>;
 
 		L3G: pm_v6g_l3: vreg-pm_v6g-l3 {
 			regulator-name = "pm_v6g_l3";
@@ -990,7 +983,7 @@
 			regulator-min-microvolt = <1800000>;
 			regulator-max-microvolt = <1800000>;
 			qcom,init-voltage = <1800000>;
-			qcom,init-mode = <RPMH_REGULATOR_MODE_LPM>;
+			qcom,init-mode = <RPMH_REGULATOR_MODE_HPM>;
 		};
 	};
 
@@ -1130,7 +1123,7 @@
 			regulator-min-microvolt = <1100000>;
 			regulator-max-microvolt = <2000000>;
 			qcom,init-voltage = <1776000>;
-			qcom,init-mode = <RPMH_REGULATOR_MODE_LPM>;
+			qcom,init-mode = <RPMH_REGULATOR_MODE_HPM>;
 		};
 	};
 
@@ -1365,17 +1358,6 @@
 			regulator-min-microvolt = <3130000>;
 			regulator-max-microvolt = <3470000>;
 			qcom,init-voltage = <3304000>;
-		};
-	};
-
-	rpmh-regulator-vrm-wcal {
-		compatible = "qcom,rpmh-pbs-regulator";
-		qcom,resource-name = "vrm.wcal";
-
-		WCAL_PBS:
-		pmk8550_wcal_pbs: regulator-pmk8550-wcal-pbs {
-			regulator-name = "pmk8550_wcal_pbs";
-			qcom,set = <RPMH_REGULATOR_SET_ALL>;
 		};
 	};
 };

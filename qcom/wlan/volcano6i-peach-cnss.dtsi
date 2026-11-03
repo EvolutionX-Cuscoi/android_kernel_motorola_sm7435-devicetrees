@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
 /*
- * Copyright (c) 2024-2025 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #include <dt-bindings/interconnect/qcom,volcano.h>
@@ -96,9 +96,9 @@
 		vdd-wlan-io12-supply = <&L5B>;
 		qcom,vdd-wlan-io12-config = <1200000 1200000 0 0 1>;
 		vdd-wlan-aon-supply = <&S1K>;
-		qcom,vdd-wlan-aon-config = <876000 1004000 0 0 0>;
+		qcom,vdd-wlan-aon-config = <876000 1004000 0 0 1>;
 		vdd-wlan-dig-supply = <&S1L>;
-		qcom,vdd-wlan-dig-config = <876000 1000000 0 0 0>;
+		qcom,vdd-wlan-dig-config = <876000 1000000 0 0 1>;
 		vdd-wlan-rfa1-supply = <&S1B>;
 		qcom,vdd-wlan-rfa1-config = <1860000 2000000 0 0 1>;
 		vdd-wlan-rfa2-supply = <&S2B>;
@@ -167,10 +167,6 @@
 	status = "disabled";
 };
 
-&wpss_mem {
-	status = "disabled";
-};
-
 &pcie0_rp {
 	#address-cells = <5>;
 	#size-cells = <0>;
@@ -185,8 +181,8 @@
 
 		cnss_pci_iommu_group0: cnss_pci_iommu_group0 {
 			qcom,iommu-msi-size = <0x1000>;
-			qcom,iommu-dma-addr-pool = <0x98000000 0x18000000>;
-			qcom,iommu-geometry = <0x98000000 0x18001000>;
+			qcom,iommu-dma-addr-pool = <0xa0000000 0x10000000>;
+			qcom,iommu-geometry = <0xa0000000 0x10010000>;
 			qcom,iommu-dma = "fastmap";
 			qcom,iommu-pagetable = "coherent";
 			qcom,iommu-faults = "stall-disable", "HUPCF",

@@ -76,10 +76,8 @@ sun-dtb-$(CONFIG_ARCH_TUNA) +=  \
 sun-overlays-dtb-$(CONFIG_ARCH_TUNA) += $(TUNA_BOARDS) $(NOAPQ_TUNA_BOARDS) $(TUNA_BASE_DTB) $(TUNA_APQ_BASE_DTB)
 dtb-y += $(sun-dtb-y)
 
-ifeq ($(CONFIG_ARCH_KERA_LE), y)
-
-KERA_BASE_DTB += kera.dtb kera-iot.dtb kera-qmb.dtb
-KERA_APQ_BASE_DTB += kerap.dtb kerap-iot.dtb kerap-qna.dtb
+KERA_BASE_DTB += kera.dtb
+KERA_APQ_BASE_DTB += kerap.dtb
 KERA_BOARDS += \
 		kera-atp-overlay.dtbo \
 		kera-mtp-qca6750-ufs4-overlay.dtbo \
@@ -91,82 +89,18 @@ KERA_BOARDS += \
 		kera-cdp-qca6750-ufs2-overlay.dtbo \
 		kera-cdp-qca6750-ufs3-overlay.dtbo \
 		kera-cdp-qca6750-ufs4-overlay.dtbo \
-		kera-iot-cdp-qca6750-ufs4-overlay.dtbo \
-		kera-cdp-qca6750-ufs4-slt-overlay.dtbo \
-		kera-cdp-emmc-overlay.dtbo \
 		kera-qrd-wcn7750-ufs4-overlay.dtbo \
 		kera-qrd-wcn7750-ufs2-overlay.dtbo \
 		kera-qrd-wcn7750-ufs3-overlay.dtbo \
-		kera-qrd-qca6750-ufs2-overlay.dtbo \
 		kera-rcm-qca6750-ufs4-overlay.dtbo \
 		kera-rcm-qca6750-ufs2-overlay.dtbo \
 		kera-rcm-qca6750-ufs3-overlay.dtbo \
 		kera-rcm-wcn7750-ufs2-overlay.dtbo \
 		kera-rcm-wcn7750-ufs3-overlay.dtbo \
-		kera-rcm-wcn7750-ufs4-overlay.dtbo \
-		kera-rcm-wcn7750-emmc-overlay.dtbo \
-		kera-rcm-wcn7750-ufs3-no-display-overlay.dtbo \
-		kera-rcm-wcn7750-ufs4-no-display-overlay.dtbo \
-		kera-rcm-wcn7750-emmc-no-display-overlay.dtbo \
-		kera-idp-emmc-overlay.dtbo \
-		kera-idp-ufs3-overlay.dtbo \
-		kera-evk-emmc-overlay.dtbo \
-		kera-evk-emmc-hdmiearc-dmic-overlay.dtbo \
-		kera-evk-emmc-hdmiearc-hat-overlay.dtbo \
-		kera-evk-emmc-lt9611uxd-dmic-overlay.dtbo \
-		kera-evk-emmc-lt9611uxd-hat-overlay.dtbo \
-		kera-evk-emmc-wcd9378-dmic-overlay.dtbo \
-		kera-evk-emmc-wcd9378-hat-overlay.dtbo
+		kera-rcm-wcn7750-ufs4-overlay.dtbo
 
 NOAPQ_KERA_BOARDS += \
 		kera-rumi-overlay.dtbo
-
-else
-
-KERA_BASE_DTB += kera.dtb kera-iot.dtb kera-qmb.dtb
-KERA_APQ_BASE_DTB += kerap.dtb kerap-iot.dtb kerap-qna.dtb
-KERA_BOARDS += \
-		kera-atp-overlay.dtbo \
-		kera-mtp-qca6750-ufs4-overlay.dtbo \
-		kera-mtp-qca6750-ufs3-overlay.dtbo \
-		kera-mtp-qca6750-qmp1000-overlay.dtbo \
-		kera-mtp-wcn7750-qmp1000-overlay.dtbo \
-		kera-mtp-wcn7750-ufs4-overlay.dtbo \
-		kera-mtp-wcn7750-ufs3-overlay.dtbo \
-		kera-cdp-qca6750-ufs2-overlay.dtbo \
-		kera-cdp-qca6750-ufs3-overlay.dtbo \
-		kera-cdp-qca6750-ufs4-overlay.dtbo \
-		kera-iot-cdp-qca6750-ufs4-overlay.dtbo \
-		kera-cdp-qca6750-ufs4-slt-overlay.dtbo \
-		kera-cdp-emmc-overlay.dtbo \
-		kera-qrd-wcn7750-ufs4-overlay.dtbo \
-		kera-qrd-wcn7750-ufs2-overlay.dtbo \
-		kera-qrd-wcn7750-ufs3-overlay.dtbo \
-		kera-qrd-qca6750-ufs2-overlay.dtbo \
-		kera-rcm-qca6750-ufs4-overlay.dtbo \
-		kera-rcm-qca6750-ufs2-overlay.dtbo \
-		kera-rcm-qca6750-ufs3-overlay.dtbo \
-		kera-rcm-wcn7750-ufs2-overlay.dtbo \
-		kera-rcm-wcn7750-ufs3-overlay.dtbo \
-		kera-rcm-wcn7750-ufs4-overlay.dtbo \
-		kera-rcm-wcn7750-emmc-overlay.dtbo \
-		kera-rcm-wcn7750-ufs3-no-display-overlay.dtbo \
-		kera-rcm-wcn7750-ufs4-no-display-overlay.dtbo \
-		kera-rcm-wcn7750-emmc-no-display-overlay.dtbo \
-		kera-idp-emmc-overlay.dtbo \
-		kera-idp-ufs3-overlay.dtbo \
-		kera-evk-emmc-overlay.dtbo \
-		kera-evk-emmc-hdmiearc-dmic-overlay.dtbo \
-		kera-evk-emmc-hdmiearc-hat-overlay.dtbo \
-		kera-evk-emmc-lt9611uxd-dmic-overlay.dtbo \
-		kera-evk-emmc-lt9611uxd-hat-overlay.dtbo \
-		kera-evk-emmc-wcd9378-dmic-overlay.dtbo \
-		kera-evk-emmc-wcd9378-hat-overlay.dtbo
-
-NOAPQ_KERA_BOARDS += \
-		kera-rumi-overlay.dtbo
-
-endif
 
 sun-dtb-$(CONFIG_ARCH_KERA) +=  \
 	$(call add-overlays, $(KERA_BOARDS) $(NOAPQ_KERA_BOARDS),$(KERA_BASE_DTB)) \
@@ -174,18 +108,6 @@ sun-dtb-$(CONFIG_ARCH_KERA) +=  \
 sun-overlays-dtb-$(CONFIG_ARCH_KERA) += $(KERA_BOARDS) $(NOAPQ_KERA_BOARDS) $(KERA_BASE_DTB) $(KERA_APQ_BASE_DTB)
 
 dtb-y += $(sun-dtb-y)
-
-QCS610_BASE_DTB += qcs610.dtb
-
-QCS610_BOARDS += \
-		 qcs610-iot-overlay.dtbo \
-		 qcs610-ipc-overlay.dtbo \
-		 qcs610-opk-overlay.dtbo
-
-qcs610-dtb-$(CONFIG_ARCH_SM6150) += \
-        $(call add-overlays, $(QCS610_BOARDS),$(QCS610_BASE_DTB))
-qcs610-overlays-dtb-$(CONFIG_ARCH_SM6150) += $(QCS610_BOARDS) $(QCS610_BASE_DTB)
-dtb-y += $(qcs610-dtb-y)
 
 PINEAPPLE_BASE_DTB += pineapple.dtb pineapple-v2.dtb
 PINEAPPLE_APQ_BASE_DTB += pineapplep.dtb pineapplep-v2.dtb
@@ -220,26 +142,9 @@ PARROT_BASE_DTB += parrot-moto-base.dtb
 PARROT_BOARDS += parrot-mona-evb-overlay.dtbo
 endif
 
-ifeq ($(CONFIG_LAMY_DTB),y)
-PARROT_BASE_DTB += parrot-moto-base.dtb
-PARROT_BOARDS += parrot-lamy-evb-overlay.dtbo
-endif
-
 ifeq ($(CONFIG_MONAI_DTB),y)
 PARROT_BASE_DTB += parrot-moto-base.dtb
 PARROT_BOARDS += parrot-monai-dvt1-overlay.dtbo
-endif
-
-ifeq ($(CONFIG_PORTOV_DTB),y)
-PARROT_BASE_DTB += parrot-moto-base.dtb
-PARROT_BOARDS += parrot-portov-evb-overlay.dtbo
-PARROT_BOARDS += parrot-portov-dvt1-overlay.dtbo
-endif
-
-ifeq ($(CONFIG_MUMBA_DTB),y)
-PARROT_BASE_DTB += parrot-moto-base.dtb
-PARROT_BOARDS += parrot-mumba-evb-overlay.dtbo
-PARROT_BOARDS += parrot-mumba-5200ma-evb-overlay.dtbo
 endif
 
 ifeq ($(CONFIG_PARO_DTB),y)
@@ -264,7 +169,7 @@ parrot-dtb-$(CONFIG_ARCH_PARROT) += \
 	$(call add-overlays, $(PARROT_BOARDS),$(PARROT_BASE_DTB))
 
 else
-PARROT_BASE_DTB += parrot.dtb parrotp.dtb parrot-sg.dtb parrotp-sg.dtb parrot-lite.dtb
+PARROT_BASE_DTB += parrot.dtb parrotp.dtb parrot-sg.dtb parrotp-sg.dtb
 PARROT_4GB_BASE_DTB += parrot-4gb.dtb
 
 PARROT_BOARDS += \
@@ -304,8 +209,8 @@ parrot-overlays-dtb-$(CONFIG_ARCH_PARROT) += $(PARROT_BOARDS) $(PARROT_BASE_DTB)
 endif
 dtb-y += $(parrot-dtb-y)
 
-RAVELIN_BASE_DTB += ravelin.dtb ravelinp.dtb ravelin-sg.dtb ravelinp-sg.dtb montague.dtb montaguep.dtb montague-qmb.dtb montague-cqm-fp1.dtb montague-cqm-fp2.dtb montague-cqm-fp3.dtb montague-cqs-fp1.dtb montague-cqs-fp2.dtb montague-cqs-fp3.dtb
-RAVELIN_4GB_BASE_DTB += ravelin-4gb.dtb ravelinp-4gb.dtb ravelin-sg.dtb ravelinp-sg.dtb montague-4gb.dtb montaguep-4gb.dtb
+RAVELIN_BASE_DTB += ravelin.dtb ravelinp.dtb ravelin-sg.dtb ravelinp-sg.dtb
+RAVELIN_4GB_BASE_DTB += ravelin-4gb.dtb ravelinp-4gb.dtb ravelin-sg.dtb ravelinp-sg.dtb
 
 RAVELIN_BOARDS += \
 		 ravelin-rumi-overlay.dtbo \
@@ -313,19 +218,10 @@ RAVELIN_BOARDS += \
 		 ravelin-idp-overlay.dtbo \
 		 ravelin-idp-wcn3950-amoled-rcm-overlay.dtbo \
 		 ravelin-qrd-overlay.dtbo \
-		 montague-rumi-overlay.dtbo \
-		 montague-hsp-overlay.dtbo \
-		 montague-rcm-overlay.dtbo \
-		 montague-wsa-overlay.dtbo \
-		 montague-wsd-overlay.dtbo \
-		 montague-idp-qps615-overlay.dtbo \
-		 montague-adrastea-overlay.dtbo \
-		 montague-apache-overlay.dtbo
 
 RAVELIN_4GB_BOARDS += \
 		 ravelin-idp-wcn3988-4gb-overlay.dtbo \
 		 ravelin-qrd-4gb-overlay.dtbo \
-		 montague-moselle-overlay.dtbo
 
 parrot-dtb-$(CONFIG_ARCH_RAVELIN) += \
 	$(call add-overlays, $(RAVELIN_BOARDS),$(RAVELIN_BASE_DTB)) \
@@ -395,8 +291,6 @@ tuna_tuivm-dtb-$(CONFIG_ARCH_QTI_VM) += tuna-vm-rumi.dtb \
 				tuna-vm-qrd.dtb \
 				tuna-vm-rcm.dtb \
 				tuna-vm-rcm-kiwi.dtb \
-				tunap-vm.dtb \
-				tuna7-vm.dtb \
 				tuna-oemvm-rumi.dtb \
 				tuna-oemvm-atp.dtb \
 				tuna-oemvm-cdp.dtb \
@@ -405,9 +299,7 @@ tuna_tuivm-dtb-$(CONFIG_ARCH_QTI_VM) += tuna-vm-rumi.dtb \
 				tuna-oemvm-mtp-qmp1000.dtb \
 				tuna-oemvm-qrd.dtb \
 				tuna-oemvm-rcm.dtb \
-				tuna-oemvm-rcm-kiwi.dtb \
-				tunap-oemvm.dtb \
-				tuna7-oemvm.dtb
+				tuna-oemvm-rcm-kiwi.dtb
 dtb-y += $(tuna_tuivm-dtb-y)
 endif
 endif
@@ -416,20 +308,16 @@ ifeq ($(CONFIG_ARCH_KERA), y)
 ifeq ($(CONFIG_ARCH_QTI_VM), y)
 kera_tuivm-dtb-$(CONFIG_ARCH_QTI_VM) += kera-vm-rumi.dtb \
 				kera-vm-atp.dtb \
-				kera-vm-cdp-qca6750.dtb \
-				kera-vm-mtp-qca6750.dtb \
-				kera-vm-mtp-wcn7750.dtb \
-				kera-vm-qrd-wcn7750.dtb \
-				kera-vm-rcm-qca6750.dtb \
-				kera-vm-rcm-wcn7750.dtb \
+				kera-vm-cdp.dtb \
+				kera-vm-mtp.dtb \
+				kera-vm-qrd.dtb \
+				kera-vm-rcm.dtb \
 				kera-oemvm-rumi.dtb \
 				kera-oemvm-atp.dtb \
-				kera-oemvm-cdp-qca6750.dtb \
-				kera-oemvm-mtp-qca6750.dtb \
-				kera-oemvm-mtp-wcn7750.dtb \
-				kera-oemvm-qrd-wcn7750.dtb \
-				kera-oemvm-rcm-qca6750.dtb \
-				kera-oemvm-rcm-wcn7750.dtb
+				kera-oemvm-cdp.dtb \
+				kera-oemvm-mtp.dtb \
+				kera-oemvm-qrd.dtb \
+				kera-oemvm-rcm.dtb
 dtb-y += $(kera_tuivm-dtb-y)
 endif
 endif
@@ -479,9 +367,7 @@ parrot_tuivm-dtb-$(CONFIG_ARCH_QTI_VM) +=  ravelin-vm-rumi.dtb \
 			ravelin-vm-idp.dtb \
 			ravelin-vm-idp-wcn3988.dtb \
 			ravelin-vm-idp-wcn3950-amoled-rcm.dtb \
-			ravelin-vm-qrd.dtb \
-			montague-vm-hsp.dtb \
-			montague-vm-moselle.dtb
+			ravelin-vm-qrd.dtb
 
 dtb-y += $(parrot_tuivm-dtb-y)
 
@@ -490,5 +376,4 @@ endif
 
 always-y        := $(dtb-y)
 subdir-y        := $(dts-dirs)
-subdir-y        += audio bt camera data display dsp eSE graphics mm mmrm mm-sys nfc synx video wlan
 clean-files     := *.dtb *.dtbo

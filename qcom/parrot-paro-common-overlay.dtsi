@@ -9,7 +9,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
-
 #include "parrot-moto-common-overlay-base.dtsi"
 #include "parrot-moto-common-overlay.dtsi"
 #include "parrot-paro-charger-overlay.dtsi"

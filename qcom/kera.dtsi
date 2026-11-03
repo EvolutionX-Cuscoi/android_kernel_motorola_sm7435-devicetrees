@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 /*
- * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #include <dt-bindings/clock/qcom,cambistmclkcc-sun.h>
@@ -19,8 +19,6 @@
 #include <dt-bindings/regulator/qcom,rpmh-regulator-levels.h>
 #include <dt-bindings/spmi/spmi.h>
 #include <dt-bindings/gpio/gpio.h>
-#include <dt-bindings/power/qcom-aoss-qmp.h>
-#include <dt-bindings/clock/qcom,aop-qmp.h>
 
 / {
 	model = "Qualcomm Technologies, Inc. Kera";
@@ -39,7 +37,6 @@
 	aliases: aliases {
 		serial0 = &qupv3_se13_2uart;
 		ufshc1 = &ufshc_mem; /* Embedded UFS Slot */
-		mmc0 = &sdhc_1; /* SDC1 eMMC slot */
 		mmc1 = &sdhc_2; /* SDC2 SD card slot */
 		hsuart0 = &qupv3_se5_4uart;
 		i2c0 = &qupv3_se0_i2c;
@@ -72,7 +69,7 @@
 	};
 
 	chosen: chosen {
-		bootargs = "log_buf_len=512K loglevel=6 cpufreq.default_governor=performance sysctl.kernel.sched_pelt_multiplier=4 no-steal-acc kpti=0 swiotlb=0 loop.max_part=7 pcie_ports=compat irqaffinity=0-2 printk.console_no_auto_verbose=1 kasan=off rcupdate.rcu_expedited=1 rcu_nocbs=0-7 kernel.panic_on_rcu_stall=1 disable_dma32=on cgroup_disable=pressure fw_devlink.strict=1 can.stats_timer=0 ftrace_dump_on_oops page_poison=on cgroup.memory=nokmem,nosocket restrict_cma_redirect=false";
+		bootargs = "log_buf_len=512K loglevel=6 cpufreq.default_governor=performance sysctl.kernel.sched_pelt_multiplier=4 no-steal-acc kpti=0 swiotlb=0 loop.max_part=7 irqaffinity=0-2 printk.console_no_auto_verbose=1 kasan=off rcupdate.rcu_expedited=1 rcu_nocbs=0-7 kernel.panic_on_rcu_stall=1 disable_dma32=on cgroup_disable=pressure fw_devlink.strict=1 can.stats_timer=0 ftrace_dump_on_oops";
 		stdout-path = "serial0:115200n8";
 	};
 
@@ -85,6 +82,7 @@
 		offline-sizes = <0x2 0xc0000000 0x1 0x0>;
 		granule = <512>;
 		qcom,qmp = <&aoss_qmp>;
+		status = "disabled";
 	};
 
 	firmware: firmware {
@@ -103,7 +101,6 @@
 			cpu-idle-states = <&SILVER_OFF &SILVER_RAIL_OFF>;
 			power-domains = <&CPU_PD0>;
 			power-domain-names = "psci";
-			qcom,freq-domain = <&cpufreq_hw 0>;
 			next-level-cache = <&L2_0>;
 			#cooling-cells = <2>;
 			dynamic-power-coefficient = <100>;
@@ -128,7 +125,6 @@
 			cpu-idle-states = <&SILVER_OFF &SILVER_RAIL_OFF>;
 			power-domains = <&CPU_PD1>;
 			power-domain-names = "psci";
-			qcom,freq-domain = <&cpufreq_hw 0>;
 			next-level-cache = <&L2_0>;
 			dynamic-power-coefficient = <100>;
 			capacity-dmips-mhz = <1024>;
@@ -143,7 +139,6 @@
 			cpu-idle-states = <&SILVER_OFF &SILVER_RAIL_OFF>;
 			power-domains = <&CPU_PD2>;
 			power-domain-names = "psci";
-			qcom,freq-domain = <&cpufreq_hw 0>;
 			next-level-cache = <&L2_2>;
 			#cooling-cells = <2>;
 			dynamic-power-coefficient = <100>;
@@ -163,7 +158,6 @@
 			cpu-idle-states = <&GOLD_OFF &GOLD_RAIL_OFF>;
 			power-domains = <&CPU_PD3>;
 			power-domain-names = "psci";
-			qcom,freq-domain = <&cpufreq_hw 1>;
 			next-level-cache = <&L2_3>;
 			#cooling-cells = <2>;
 			dynamic-power-coefficient = <263>;
@@ -183,7 +177,6 @@
 			cpu-idle-states = <&GOLD_OFF &GOLD_RAIL_OFF>;
 			power-domains = <&CPU_PD4>;
 			power-domain-names = "psci";
-			qcom,freq-domain = <&cpufreq_hw 1>;
 			next-level-cache = <&L2_4>;
 			#cooling-cells = <2>;
 			dynamic-power-coefficient = <263>;
@@ -203,7 +196,6 @@
 			cpu-idle-states = <&GOLD_OFF &GOLD_RAIL_OFF>;
 			power-domains = <&CPU_PD5>;
 			power-domain-names = "psci";
-			qcom,freq-domain = <&cpufreq_hw 1>;
 			next-level-cache = <&L2_5>;
 			#cooling-cells = <2>;
 			dynamic-power-coefficient = <263>;
@@ -223,7 +215,6 @@
 			cpu-idle-states = <&GOLD_OFF &GOLD_RAIL_OFF>;
 			power-domains = <&CPU_PD6>;
 			power-domain-names = "psci";
-			qcom,freq-domain = <&cpufreq_hw 1>;
 			next-level-cache = <&L2_6>;
 			#cooling-cells = <2>;
 			dynamic-power-coefficient = <263>;
@@ -243,7 +234,6 @@
 			cpu-idle-states = <&GOLD_PLUS_OFF &GOLD_PLUS_RAIL_OFF>;
 			power-domains = <&CPU_PD7>;
 			power-domain-names = "psci";
-			qcom,freq-domain = <&cpufreq_hw 2>;
 			next-level-cache = <&L2_7>;
 			#cooling-cells = <2>;
 			dynamic-power-coefficient = <289>;
@@ -416,6 +406,7 @@
 #include "kera-reserved-memory.dtsi"
 #include "msm-arm-smmu-kera.dtsi"
 #include "kera-dma-heaps.dtsi"
+#include "kera-vm-dma-heaps.dtsi"
 
 &reserved_memory {
 	#address-cells = <2>;
@@ -508,30 +499,15 @@
 		};
 	};
 
-	show_resume_irqs@17100000 {
-		compatible = "qcom,show-resume-irqs";
-		reg = <0x17100000 0x290000>;	/* GICD */
-	};
-
 	intc: interrupt-controller@17100000 {
 		compatible = "arm,gic-v3";
 		#interrupt-cells = <3>;
 		interrupt-controller;
-		ranges;
 		#redistributor-regions = <1>;
 		redistributor-stride = <0x0 0x40000>;
 		reg = <0x17100000 0x10000>,	/* GICD */
 		      <0x17180000 0x200000>;	/* GICR * 8 */
 		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-
-		#address-cells = <1>;
-		#size-cells = <1>;
-		gic_its: msi-controller@17140000 {
-			compatible = "arm,gic-v3-its";
-			msi-controller;
-			#msi-cells = <1>;
-			reg = <0x17140000 0x20000>;
-		};
 	};
 
 	qcom,hdcp {
@@ -660,11 +636,6 @@
 				qcom,llcc-bcm-name = "SH5";
 
 			};
-
-			rpmhcc: clock-controller {
-				compatible = "qcom,tuna-rpmh-clk";
-				#clock-cells = <1>;
-			};
 		};
 	};
 
@@ -688,42 +659,6 @@
 						  <FAST_PATH_TCS 0>;
 			};
 		};
-	};
-
-	disp_crm: crm@af21000 {
-		label = "disp_crm";
-		compatible = "qcom,disp-crm-v2";
-		reg = <0xaf21000 0x6000>, <0xaf27000 0x400>, <0xaf27400 0x400>,
-		      <0xaf27800 0x2000>, <0xaf29800 0x700>, <0xaf29f00 0x100>;
-		reg-names = "base", "crm_b", "crm_b_pt", "crm_c", "crm_v", "common";
-		interrupts = <GIC_SPI 702 IRQ_TYPE_EDGE_RISING>,
-			     <GIC_SPI 707 IRQ_TYPE_EDGE_RISING>,
-			     <GIC_SPI 713 IRQ_TYPE_EDGE_RISING>,
-			     <GIC_SPI 68 IRQ_TYPE_EDGE_RISING>,
-			     <GIC_SPI 96 IRQ_TYPE_EDGE_RISING>,
-			     <GIC_SPI 242 IRQ_TYPE_EDGE_RISING>;
-		interrupt-names = "disp_crm_drv0",
-				  "disp_crm_drv1",
-				  "disp_crm_drv2",
-				  "disp_crm_drv3",
-				  "disp_crm_drv4",
-				  "disp_crm_drv5";
-		clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>;
-		qcom,hw-drv-ids = <0 1 2 3 4 5>;
-		qcom,sw-drv-ids = <0 1 2 3 4 5>;
-	};
-
-	pcie_crm: crm@1d01000 {
-		label = "pcie_crm";
-		compatible = "qcom,pcie-crm-v2";
-		reg = <0x1d01000 0x2000>, <0x1d03000 0x400>, <0x1d03400 0x400>,
-		      <0x1d03800 0x2000>, <0x1d05800 0x700>, <0x1d05f00 0x100>;
-		reg-names = "base", "crm_b", "crm_b_pt", "crm_c", "crm_v", "common";
-		interrupts = <GIC_SPI 640 IRQ_TYPE_EDGE_RISING>;
-		interrupt-names = "pcie_crm_drv0";
-		clocks = <&pcie_0_pipe_clk>;
-		qcom,hw-drv-ids = <0 1>;
-		qcom,sw-drv-ids = <0>;
 	};
 
 	pdc: interrupt-controller@b220000 {
@@ -758,19 +693,12 @@
 		qcom,rproc-handle = <&adsp_pas>;
 	};
 
-	pcie_pdc: pdc@b360000 {
-		compatible = "qcom,kera-pcie-pdc", "qcom,pcie-pdc";
-		reg = <0xb360000 0x10000>;
-	};
-
 	adsp_pas: remoteproc-adsp@03000000 {
 		compatible = "qcom,kera-adsp-pas";
 		reg = <0x03000000 0x10000>;
 		status = "ok";
 
-		cx-supply = <&VDD_LPI_CX_LEVEL>;
 		cx-uV-uA = <RPMH_REGULATOR_LEVEL_TURBO 0>;
-		mx-supply = <&VDD_LPI_MX_LEVEL>;
 		mx-uV-uA = <RPMH_REGULATOR_LEVEL_TURBO 0>;
 
 		reg-names = "cx", "mx";
@@ -848,11 +776,8 @@
 		reg = <0x32300000 0x10000>;
 		status = "ok";
 
-		cx-supply = <&VDD_CX_LEVEL>;
 		cx-uV-uA = <RPMH_REGULATOR_LEVEL_TURBO 100000>;
-		mx-supply = <&VDD_MX_LEVEL>;
 		mx-uV-uA = <RPMH_REGULATOR_LEVEL_TURBO 100000>;
-		nsp-supply = <&VDD_NSP1_LEVEL>;
 		nsp-uV-uA = <RPMH_REGULATOR_LEVEL_TURBO 100000>;
 
 		reg-names = "cx","mx","nsp";
@@ -931,9 +856,7 @@
 		reg = <0x4080000 0x10000>;
 		status = "ok";
 
-		cx-supply = <&VDD_CX_LEVEL>;
 		cx-uV-uA = <RPMH_REGULATOR_LEVEL_TURBO 100000>;
-		mx-supply = <&VDD_MODEM_LEVEL>;
 		mx-uV-uA = <RPMH_REGULATOR_LEVEL_NOM_L1 100000>;
 
 		reg-names = "cx", "mx";
@@ -1109,10 +1032,6 @@
 		};
 	};
 
-	qcom,glink {
-		compatible = "qcom,glink";
-	};
-
 	sys-pm-vx@c320000 {
 		compatible = "qcom,sys-pm-violators", "qcom,sys-pm-kera";
 		reg = <0xc320000 0x400>;
@@ -1208,7 +1127,7 @@
 
 	slim_msm: slim@6c40000 {
 		compatible = "qcom,slim-ngd-v1.5.0";
-		reg = <0x6c40000 0x2c000>, <0x6c8e000 0x1000>;
+		reg = <0x6c40000 0x2c000>, <0x6c8E000 0x1000>;
 		reg-names = "ctrl", "slimbus_remote_mem";
 		interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>;
 		dmas = <&slimbam 3>, <&slimbam 4>;
@@ -1307,12 +1226,6 @@
 			"llcc_broadcast_or_base", "llcc_broadcast_and_base";
 		interrupts = <GIC_SPI 266 IRQ_TYPE_LEVEL_HIGH>;
 		cap-based-alloc-and-pwr-collapse;
-
-		llcc_perfmon {
-			compatible = "qcom,llcc-perfmon";
-			clocks = <&aoss_qmp QDSS_CLK>;
-			clock-names = "qdss_clk";
-		};
 	};
 
 	gic-interrupt-router {
@@ -1676,30 +1589,12 @@
 		feat_conf6: feat_conf6@0118 {
 			reg = <0x0118 0x4>;
 		};
-
-		feat_conf18: feat_conf18@0148 {
-			reg = <0x0148 0x4>;
-		};
-
-		gpu_speed_bin: gpu_speed_bin@138 {
-			reg = <0x138 0x2>;
-			bits = <0 9>;
-		};
-
-		gpu_gaming_bin: gpu_gaming_bin@14b {
-			reg = <0x14b 0x1>;
-			bits = <7 1>;
-		};
-
-		boot_config: boot_config@600 {
-			reg = <0x600 0x1>;
-		};
 	};
 
 	 qfprom_sys: qfprom@0 {
 		compatible = "qcom,qfprom-sys";
-		nvmem-cells = <&feat_conf6>, <&feat_conf18>, <&boot_config>;
-		nvmem-cell-names = "feat_conf6", "feat_conf18", "boot_config";
+		nvmem-cells = <&feat_conf6>;
+		nvmem-cell-names = "feat_conf6";
 	};
 
 	wpss_pas: remoteproc-wpss@97000000 {
@@ -1835,14 +1730,13 @@
 			clock-output-names = "usb3_phy_wrapper_gcc_usb30_pipe_clk";
 			#clock-cells = <0>;
 		};
+	};
 
-		clk8_a4: clk8_a4 {
-			compatible = "fixed-factor-clock";
-			clocks = <&rpmhcc RPMH_LN_BB_CLK3>;
-			clock-mult = <1>;
-			clock-div = <2>;
-			#clock-cells = <0>;
-		};
+	rpmhcc: clock-controller {
+		compatible = "fixed-clock";
+		clock-output-names = "rpmh_clocks";
+		clock-frequency = <19200000>;
+		#clock-cells = <1>;
 	};
 
 	cambistmclkcc: clock-controller@1760000 {
@@ -1906,7 +1800,7 @@
 	};
 
 	dispcc: clock-controller@af00000 {
-		compatible = "qcom,kera-dispcc", "syscon";
+		compatible = "qcom,tuna-dispcc", "syscon";
 		reg = <0xaf00000 0x20000>;
 		reg-name = "cc_base";
 		vdd_mm-supply = <&VDD_CX_LEVEL>;
@@ -1922,7 +1816,6 @@
 		qcom,disp_crm-crmc = <&dispcc_crm>;
 		#clock-cells = <1>;
 		#reset-cells = <1>;
-		#power-domain-cells = <1>;
 	};
 
 	gcc: clock-controller@100000 {
@@ -1947,34 +1840,15 @@
 			      "ufs_phy_rx_symbol_1_clk",
 			      "ufs_phy_tx_symbol_0_clk",
 			      "usb3_phy_wrapper_gcc_usb30_pipe_clk";
-		protected-clocks = <GCC_PCIE_1_AUX_CLK>, <GCC_PCIE_1_AUX_CLK_SRC>,
-				<GCC_PCIE_1_CFG_AHB_CLK>, <GCC_PCIE_1_MSTR_AXI_CLK>,
-				<GCC_PCIE_1_PHY_RCHNG_CLK>, <GCC_PCIE_1_PHY_RCHNG_CLK_SRC>,
-				<GCC_PCIE_1_PIPE_CLK>, <GCC_PCIE_1_PIPE_CLK_SRC>,
-				<GCC_PCIE_1_PIPE_DIV2_CLK>, <GCC_PCIE_1_PIPE_DIV2_CLK_SRC>,
-				<GCC_PCIE_1_SLV_AXI_CLK>, <GCC_PCIE_1_SLV_Q2A_AXI_CLK>;
 		#clock-cells = <1>;
 		#reset-cells = <1>;
 	};
 
 	gpucc: clock-controller@3d90000 {
-		compatible = "qcom,kera-gpucc", "syscon";
-		reg = <0x3d90000 0xa000>;
-		reg-name = "cc_base";
-		vdd_cx-supply = <&VDD_CX_LEVEL>;
-		vdd_mx-supply = <&VDD_MX_LEVEL>;
-		vdd_gx-supply = <&VDD_GFX_LEVEL>;
-		clocks = <&rpmhcc RPMH_CXO_CLK>,
-			<&rpmhcc RPMH_CXO_CLK_A>,
-			 <&gcc GCC_GPU_GPLL0_CPH_CLK_SRC>,
-			 <&gcc GCC_GPU_GPLL0_DIV_CPH_CLK_SRC>;
-		clock-names = "bi_tcxo",
-			      "bi_tcxo_ao",
-			      "gpll0_out_main",
-			      "gpll0_out_main_div";
+		compatible = "qcom,dummycc";
+		clock-output-names = "gpucc_clocks";
 		#clock-cells = <1>;
 		#reset-cells = <1>;
-		#power-domain-cells = <1>;
 	};
 
 	tcsrcc: clock-controller@1f40000 {
@@ -1991,7 +1865,6 @@
 		reg-name = "cc_base";
 		vdd_mm-supply = <&VDD_CX_LEVEL>;
 		vdd_mxc-supply = <&VDD_MX_LEVEL>;
-		vdd_mm_mxc_voter-supply = <&VDD_CX_LEVEL>;
 		clocks = <&rpmhcc RPMH_CXO_CLK>,
 			 <&rpmhcc RPMH_CXO_CLK_A>,
 			 <&sleep_clk>,
@@ -2002,118 +1875,24 @@
 			      "iface";
 		#clock-cells = <1>;
 		#reset-cells = <1>;
-		#power-domain-cells = <1>;
 	};
 
 	qti,smmu-proxy {
 		compatible = "smmu-proxy-sender";
 	};
 
-	cpufreq_hw: qcom,cpufreq-hw {
-		compatible = "qcom,cpufreq-epss";
-		reg = <0x17d91000 0x1000>, <0x17d92000 0x1000>, <0x17d93000 0x1000>;
-		reg-names = "freq-domain0", "freq-domain1", "freq-domain2";
-		clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
-		clock-names = "xo", "alternate";
-		interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>,
-			     <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>,
-			     <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
-		interrupt-names = "dcvsh0_int", "dcvsh1_int", "dcvsh2_int";
-		#freq-domain-cells = <1>;
-	};
-
-	qcom,cpufreq-hw-debug {
-		compatible = "qcom,cpufreq-hw-epss-debug";
-		qcom,freq-hw-domain = <&cpufreq_hw 0>, <&cpufreq_hw 1>, <&cpufreq_hw 2>;
-	};
-
-	pcie_crm_hw_0_bcm_voter: bcm_voter@0 {
-		compatible = "qcom,bcm-voter";
-		qcom,crm-name = "pcie_crm";
-		qcom,crm-client-idx = <0>;
-		qcom,crm-pwr-states = <5>;
-	};
-
-	disp_crm_hw_0_bcm_voter: bcm_voter@1 {
-		compatible = "qcom,bcm-voter";
-		qcom,crm-name = "disp_crm";
-		qcom,crm-client-idx = <0>;
-		qcom,crm-pwr-states = <2>;
-	};
-
-	disp_crm_hw_1_bcm_voter: bcm_voter@2 {
-		compatible = "qcom,bcm-voter";
-		qcom,crm-name = "disp_crm";
-		qcom,crm-client-idx = <1>;
-		qcom,crm-pwr-states = <2>;
-	};
-
-	disp_crm_hw_2_bcm_voter: bcm_voter@3 {
-		compatible = "qcom,bcm-voter";
-		qcom,crm-name = "disp_crm";
-		qcom,crm-client-idx = <2>;
-		qcom,crm-pwr-states = <2>;
-	};
-
-	disp_crm_hw_3_bcm_voter: bcm_voter@4 {
-		compatible = "qcom,bcm-voter";
-		qcom,crm-name = "disp_crm";
-		qcom,crm-client-idx = <3>;
-		qcom,crm-pwr-states = <2>;
-	};
-
-	disp_crm_hw_4_bcm_voter: bcm_voter@5 {
-		compatible = "qcom,bcm-voter";
-		qcom,crm-name = "disp_crm";
-		qcom,crm-client-idx = <4>;
-		qcom,crm-pwr-states = <2>;
-	};
-
-	disp_crm_hw_5_bcm_voter: bcm_voter@6 {
-		compatible = "qcom,bcm-voter";
-		qcom,crm-name = "disp_crm";
-		qcom,crm-client-idx = <5>;
-		qcom,crm-pwr-states = <2>;
-	};
-
-	disp_crm_sw_0_bcm_voter: bcm_voter@7 {
-		compatible = "qcom,bcm-voter";
-		qcom,crm-name = "disp_crm";
-		qcom,crm-sw-client;
-		qcom,crm-client-idx = <0>;
-		qcom,crm-pwr-states = <1>;
-	};
-
 	clk_virt: interconnect@0 {
 		compatible = "qcom,kera-clk_virt";
 		#interconnect-cells = <1>;
-		qcom,bcm-voter-names = "hlos",
-				       "pcie_crm_hw_0";
-		qcom,bcm-voters = <&apps_bcm_voter>,
-				  <&pcie_crm_hw_0_bcm_voter>;
+		qcom,bcm-voter-names = "hlos";
+		qcom,bcm-voters = <&apps_bcm_voter>;
 	};
 
 	mc_virt: interconnect@1 {
 		compatible = "qcom,kera-mc_virt";
 		#interconnect-cells = <1>;
-		qcom,bcm-voter-names = "hlos",
-				       "pcie_crm_hw_0",
-				       "disp_crm_hw_0",
-				       "disp_crm_hw_1",
-				       "disp_crm_hw_2",
-				       "disp_crm_hw_3",
-				       "disp_crm_hw_4",
-				       "disp_crm_hw_5",
-				       "disp_crm_sw_0";
-		qcom,bcm-voters = <&apps_bcm_voter>,
-				  <&pcie_crm_hw_0_bcm_voter>,
-				  <&disp_crm_hw_0_bcm_voter>,
-				  <&disp_crm_hw_1_bcm_voter>,
-				  <&disp_crm_hw_2_bcm_voter>,
-				  <&disp_crm_hw_3_bcm_voter>,
-				  <&disp_crm_hw_4_bcm_voter>,
-				  <&disp_crm_hw_5_bcm_voter>,
-				  <&disp_crm_sw_0_bcm_voter>;
+		qcom,bcm-voter-names = "hlos";
+		qcom,bcm-voters = <&apps_bcm_voter>;
 	};
 
 	config_noc: interconnect@1600000 {
@@ -2122,6 +1901,7 @@
 		#interconnect-cells = <1>;
 		qcom,bcm-voter-names = "hlos";
 		qcom,bcm-voters = <&apps_bcm_voter>;
+		qcom,skip-qos;
 	};
 
 	cnoc_main: interconnect@1500000 {
@@ -2130,6 +1910,7 @@
 		#interconnect-cells = <1>;
 		qcom,bcm-voter-names = "hlos";
 		qcom,bcm-voters = <&apps_bcm_voter>;
+		qcom,skip-qos;
 	};
 
 	system_noc: interconnect@1680000 {
@@ -2138,18 +1919,16 @@
 		#interconnect-cells = <1>;
 		qcom,bcm-voter-names = "hlos";
 		qcom,bcm-voters = <&apps_bcm_voter>;
+		qcom,skip-qos;
 	};
 
 	pcie_noc: interconnect@16c0000 {
 		compatible = "qcom,kera-pcie_anoc";
 		reg = <0x16c0000 0x11400>;
 		#interconnect-cells = <1>;
-		qcom,bcm-voter-names = "hlos",
-				       "pcie_crm_hw_0";
-		qcom,bcm-voters = <&apps_bcm_voter>,
-				  <&pcie_crm_hw_0_bcm_voter>;
-		clocks = <&gcc GCC_AGGRE_NOC_PCIE_AXI_CLK>,
-			<&gcc GCC_CFG_NOC_PCIE_ANOC_AHB_CLK>;
+		qcom,bcm-voter-names = "hlos";
+		qcom,bcm-voters = <&apps_bcm_voter>;
+		qcom,skip-qos;
 	};
 
 	aggre1_noc: interconnect@16e0000 {
@@ -2158,7 +1937,7 @@
 		#interconnect-cells = <1>;
 		qcom,bcm-voter-names = "hlos";
 		qcom,bcm-voters = <&apps_bcm_voter>;
-		clocks = <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>;
+		qcom,skip-qos;
 	};
 
 	aggre2_noc: interconnect@1700000 {
@@ -2167,53 +1946,25 @@
 		#interconnect-cells = <1>;
 		qcom,bcm-voter-names = "hlos";
 		qcom,bcm-voters = <&apps_bcm_voter>;
-		clocks = <&rpmhcc RPMH_IPA_CLK>;
+		qcom,skip-qos;
 	};
 
 	mmss_noc: interconnect@1780000 {
 		compatible = "qcom,kera-mmss_noc";
 		reg = <0x1780000 0x7d800>;
 		#interconnect-cells = <1>;
-		qcom,bcm-voter-names = "hlos",
-				       "disp_crm_hw_0",
-				       "disp_crm_hw_1",
-				       "disp_crm_hw_2",
-				       "disp_crm_hw_3",
-				       "disp_crm_hw_4",
-				       "disp_crm_hw_5",
-				       "disp_crm_sw_0";
-		qcom,bcm-voters = <&apps_bcm_voter>,
-				  <&disp_crm_hw_0_bcm_voter>,
-				  <&disp_crm_hw_1_bcm_voter>,
-				  <&disp_crm_hw_2_bcm_voter>,
-				  <&disp_crm_hw_3_bcm_voter>,
-				  <&disp_crm_hw_4_bcm_voter>,
-				  <&disp_crm_hw_5_bcm_voter>,
-				  <&disp_crm_sw_0_bcm_voter>;
+		qcom,bcm-voter-names = "hlos";
+		qcom,bcm-voters = <&apps_bcm_voter>;
+		qcom,skip-qos;
 	};
 
 	gem_noc: interconnect@24100000 {
 		compatible = "qcom,kera-gem_noc";
 		reg = <0x24100000 0x163080>;
 		#interconnect-cells = <1>;
-		qcom,bcm-voter-names = "hlos",
-				       "pcie_crm_hw_0",
-				       "disp_crm_hw_0",
-				       "disp_crm_hw_1",
-				       "disp_crm_hw_2",
-				       "disp_crm_hw_3",
-				       "disp_crm_hw_4",
-				       "disp_crm_hw_5",
-				       "disp_crm_sw_0";
-		qcom,bcm-voters = <&apps_bcm_voter>,
-				  <&pcie_crm_hw_0_bcm_voter>,
-				  <&disp_crm_hw_0_bcm_voter>,
-				  <&disp_crm_hw_1_bcm_voter>,
-				  <&disp_crm_hw_2_bcm_voter>,
-				  <&disp_crm_hw_3_bcm_voter>,
-				  <&disp_crm_hw_4_bcm_voter>,
-				  <&disp_crm_hw_5_bcm_voter>,
-				  <&disp_crm_sw_0_bcm_voter>;
+		qcom,bcm-voter-names = "hlos";
+		qcom,bcm-voters = <&apps_bcm_voter>;
+		qcom,skip-qos;
 	};
 
 	nsp_noc: interconnect@320c0000 {
@@ -2222,6 +1973,7 @@
 		#interconnect-cells = <1>;
 		qcom,bcm-voter-names = "hlos";
 		qcom,bcm-voters = <&apps_bcm_voter>;
+		qcom,skip-qos;
 	};
 
 	lpass_ag_noc: interconnect@7e40000 {
@@ -2230,6 +1982,7 @@
 		#interconnect-cells = <1>;
 		qcom,bcm-voter-names = "hlos";
 		qcom,bcm-voters = <&apps_bcm_voter>;
+		qcom,skip-qos;
 	};
 
 	lpass_lpiaon_noc: interconnect@7400000 {
@@ -2238,6 +1991,7 @@
 		#interconnect-cells = <1>;
 		qcom,bcm-voter-names = "hlos";
 		qcom,bcm-voters = <&apps_bcm_voter>;
+		qcom,skip-qos;
 	};
 
 	lpass_lpicx_noc: interconnect@7420000 {
@@ -2246,12 +2000,7 @@
 		#interconnect-cells = <1>;
 		qcom,bcm-voter-names = "hlos";
 		qcom,bcm-voters = <&apps_bcm_voter>;
-	};
-
-	gh-rm-booster {
-		compatible = "qcom,gh-rm-booster";
-		qcom,rm-vmid = <255>;
-		qcom,rm-affinity-default = <0>;
+		qcom,skip-qos;
 	};
 
 	trust_ui_vm_vblk0_ring: trust_ui_vm_vblk0_ring {
@@ -2477,90 +2226,6 @@
 		compatible = "qcom,cpufreq-stats-v2";
 	};
 
-	qcom_mpam: qcom,mpam {
-		compatible = "qcom,mpam";
-	};
-
-	cpu_mpam: qcom,cpu_mpam {
-		compatible = "qcom,cpu-mpam";
-
-		L3 {
-			qcom,msc-id = <0>;
-			qcom,msc-name = "L3";
-		};
-	};
-
-	noc_bw_mpam: qcom,noc_bw_mpam {
-		compatible = "qcom,platform-mpam";
-		reg = <0x17D2E800 0x400>;
-		reg-names = "mon-base";
-		qcom,msc-id = <3>;
-		qcom,msc-name = "noc_bw";
-		qcom,gears = "low", "medium", "high", "veryhigh";
-		qcom,gear-id = <1>, <2>, <3>, <4>;
-
-		cpu {
-			qcom,client-id = <0x1>;
-			qcom,client-name = "cpu";
-		};
-
-		gpu {
-			qcom,client-id = <0x10>;
-			qcom,client-name = "gpu";
-		};
-
-		nsp {
-			qcom,client-id = <0x100>;
-			qcom,client-name = "nsp";
-		};
-	};
-
-	qcom-mpam-msc {
-		compatible = "qcom,mpam-msc";
-		#address-cells = <1>;
-		#size-cells = <1>;
-		ranges;
-
-		qcom-slc-mpam@17D2EC00 {
-			compatible = "qcom,slc-mpam";
-			reg = <0x17D2EC00 0x400>;
-			reg-names = "mon-base";
-			qcom,msc-id = <2>;
-			qcom,msc-name = "slc";
-			qcom,dev-index = <0>;
-			qcom,num-read-miss-cfg = <2>;
-			qcom,num-cap-cfg = <5>;
-			qcom,slc-clients = "APPS_CLIENT", "GPU_CLIENT";
-		};
-	};
-
-	qcom_slc_mpam: qcom,slc_mpam {
-		compatible = "qcom,mpam-slc";
-		qcom,msc-name = "slc";
-
-		apps {
-			qcom,client-id = <0>;
-			qcom,client-name = "apps";
-
-			part-id0 {
-				qcom,part-id = <0>;
-			};
-
-			part-id1 {
-				qcom,part-id = <1>;
-			};
-
-			part-id2 {
-				qcom,part-id = <2>;
-			};
-		};
-
-		gpu {
-			qcom,client-id = <1>;
-			qcom,client-name = "gpu";
-		};
-	};
-
 	spmi_bus: spmi0_bus: qcom,spmi@c42d000 {
 		compatible = "qcom,spmi-pmic-arb";
 			reg = <0xc42d000 0x4000>,
@@ -2714,13 +2379,6 @@
 
 		ucsi: qcom,ucsi {
 			compatible = "qcom,ucsi-glink";
-			connector {
-				port {
-					usb_port0_connector: endpoint {
-					remote-endpoint = <&usb_port0>;
-					};
-				};
-			};
 		};
 
 		altmode: qcom,altmode {
@@ -2763,91 +2421,6 @@
 		reg = <0x0 0x400000>;
 		reg-names = "rmtfs";
 		qcom,client-id = <0x00000001>;
-	};
-
-	sdhc1_opp_table: sdhc1-opp-table {
-		compatible = "operating-points-v2";
-
-		opp-100000000 {
-			opp-hz = /bits/ 64 <100000000>;
-			opp-peak-kBps = <1600000 280000>;
-			opp-avg-kBps = <104000 0>;
-		};
-
-		opp-384000000 {
-			opp-hz = /bits/ 64 <384000000>;
-			opp-peak-kBps = <5600000 1500000>;
-			opp-avg-kBps = <400000 0>;
-		};
-	};
-
-	sdhc_1: sdhci@F44000 {
-		status = "disabled";
-
-		compatible = "qcom,sdhci-msm-v5";
-		reg = <0x00F44000 0x1000>, <0x00F45000 0x1000>,
-			<0x00F48000 0x18000>;
-		reg-names = "hc", "cqhci", "ice";
-
-		interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>,
-				<GIC_SPI 417 IRQ_TYPE_LEVEL_HIGH>;
-		interrupt-names = "hc_irq", "pwr_irq";
-
-		boot_device_type = <0x6>;
-		nvmem-cells = <&boot_config>;
-		nvmem-cell-names = "boot_conf";
-
-		qcom,ice-use-hwkm;
-		bus-width = <8>;
-		non-removable;
-		supports-cqe;
-
-		no-sd;
-		no-sdio;
-
-		mmc-ddr-1_8v;
-		mmc-hs200-1_8v;
-		mmc-hs400-1_8v;
-		mmc-hs400-enhanced-strobe;
-
-		cap-mmc-hw-reset;
-
-		clocks = <&gcc GCC_SDCC1_AHB_CLK>,
-			<&gcc GCC_SDCC1_APPS_CLK>,
-			<&gcc GCC_SDCC1_ICE_CORE_CLK>;
-		clock-names = "iface", "core", "ice_core";
-
-		qcom,ice-clk-rates = <300000000 100000000>;
-
-		/* DLL HSR settings. Refer go/hsr - <Target> DLL settings */
-		qcom,dll-hsr-list = <0x000F44EC 0x0 0x01
-					0x090106C0 0x80040868>;
-
-		/* Add dt entry for gcc hw reset */
-		resets = <&gcc GCC_SDCC1_BCR>;
-		reset-names = "core_reset";
-
-		iommus = <&apps_smmu 0x520 0x0>;
-		dma-coherent;
-		qcom,iommu-dma = "fastmap";
-
-		qcom,iommu-dma-addr-pool = <0x40000000 0x10000000>;
-		qcom,iommu-geometry = <0x40000000 0x10000000>;
-
-		interconnects = <&aggre2_noc MASTER_SDCC_1 &mc_virt SLAVE_EBI1>,
-			<&gem_noc MASTER_APPSS_PROC &config_noc SLAVE_SDCC_1>;
-		interconnect-names = "sdhc-ddr","cpu-sdhc";
-		operating-points-v2 = <&sdhc1_opp_table>;
-
-		qos0 {
-			mask = <0xf8>;
-			vote = <44>;
-		};
-
-		qos1 {
-			mask = <0x07>;
-			vote = <44>;
-		};
 	};
 
 	sdhc2_opp_table: sdhc2-opp-table {
@@ -2904,7 +2477,6 @@
 					0x090106C0 0x80040868>;
 
 		iommus = <&apps_smmu 0x540 0x0>;
-		qcom,iommu-geometry = <0x40000000 0x10000000>;
 		qcom,iommu-dma = "fastmap";
 		dma-coherent;
 		memory-region = <&sdhc_2_dma_resv>;
@@ -2982,23 +2554,14 @@
 	ufshc_mem: ufshc@1d84000 {
 		compatible = "qcom,ufshc";
 		reg = <0x1d84000 0x3000>,
-			<0x1d88000 0x18000>,
-			<0x1da5000 0x2000>,
-			<0x1da4000 0x10>;
-		reg-names = "ufs_mem", "ice", "mcq_sqd", "mcq_vs";
+			<0x1d88000 0x18000>;
+		reg-names = "ufs_mem", "ice";
 		interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>;
 		phys = <&ufsphy_mem>;
 		phy-names = "ufsphy";
 		#reset-cells = <1>;
-		boot_device_type = <0x0>;
-		nvmem-cells = <&boot_config>;
-		nvmem-cell-names = "boot_conf";
 
 		qcom,ice-use-hwkm;
-
-		qcom,prime-mask = <0x80>;
-		qcom,silver-mask = <0x07>;
-		qcom,esi-affinity-mask = <6 5 4 7 7 6 6 7>;
 
 		lanes-per-direction = <2>;
 		clock-names =
@@ -3040,9 +2603,7 @@
 		depends-on-supply = <&apps_smmu>;
 
 		iommus = <&apps_smmu 0x60 0x0>;
-		qcom,iommu-dma = "fastmap";
-		msi-parent = <&gic_its 0x60>;
-		qcom,iommu-msi-size = <0x1000>;
+		qcom,iommu-dma = "bypass";
 		memory-region = <&ufshc_dma_resv>;
 		shared-ice-cfg = <&ice_cfg>;
 		dma-coherent;
@@ -3248,7 +2809,7 @@
 						<  940800  547000 >,
 						< 1190400 1017000 >,
 						< 2208000 1708000 >,
-						< 2361600 2092000 >;
+						< 2400000 2092000 >;
 				};
 
 				ddr5-tbl {
@@ -3259,7 +2820,7 @@
 						< 1612800 1555000 >,
 						< 1824000 1708000 >,
 						< 2208000 2092000 >,
-						< 2361600 4224000 >;
+						< 2400000 3196000 >;
 				};
 			};
 
@@ -3273,8 +2834,8 @@
 						<  960000  547000 >,
 						< 1209600 1017000 >,
 						< 1459200 1555000 >,
-						< 1900800 1708000 >,
-						< 2630400 2092000 >;
+						< 1804800 1708000 >,
+						< 2304000 2092000 >;
 				};
 
 				ddr5-tbl {
@@ -3284,8 +2845,8 @@
 						< 1209600  768000 >,
 						< 1459200 1555000 >,
 						< 1651200 1708000 >,
-						< 1900800 2092000 >,
-						< 2630400 3196000 >;
+						< 1804800 2092000 >,
+						< 2304000 3196000 >;
 				};
 			};
 
@@ -3301,7 +2862,7 @@
 						< 1190400  768000 >,
 						< 1612800 1017000 >,
 						< 2208000 1708000 >,
-						< 2361600 2092000 >;
+						< 2400000 2092000 >;
 				};
 
 				ddr5-tbl {
@@ -3311,7 +2872,7 @@
 						< 1190400  768000 >,
 						< 1612800 1555000 >,
 						< 2208000 2092000 >,
-						< 2361600 3196000 >;
+						< 2400000 3196000 >;
 				};
 			};
 
@@ -3346,9 +2907,9 @@
 				qcom,cpulist = <&CPU0 &CPU1 &CPU2>;
 				qcom,sampling-enabled;
 				qcom,cpufreq-memfreq-tbl =
-					<  902400  350000 >,
-					< 1497600  533000 >,
-					< 2054400  600000 >;
+					<  883200  350000 >,
+					< 1401600  533000 >,
+					< 2016000  600000 >;
 			};
 
 			gold {
@@ -3360,9 +2921,9 @@
 					< 1190400  533000 >,
 					< 1401600  600000 >,
 					< 1824000  806000 >,
-					< 2534400  933000 >,
-					< 2707200 1066000 >,
-					< 2841600 1211000 >;
+					< 2803200  933000 >,
+					< 2918400 1066000 >,
+					< 3014400 1211000 >;
 			};
 
 			gold-compute {
@@ -3388,16 +2949,16 @@
 				qcom,sampling-enabled;
 				qcom,cpufreq-memfreq-tbl =
 					<  441600  364800 >,
-					<  595200  518400 >,
+					<  595200  556800 >,
 					<  787200  710400 >,
 					<  902400  806400 >,
 					< 1113600  998400 >,
 					< 1228800 1094400 >,
 					< 1344000 1209600 >,
-					< 1497600 1344000 >,
+					< 1497600 1363200 >,
 					< 1708800 1497600 >,
-					< 1843200 1593600 >,
-					< 2054400 1785600 >;
+					< 1804800 1516800 >,
+					< 2054400 1804800 >;
 			};
 
 			gold {
@@ -3406,14 +2967,14 @@
 				qcom,sampling-enabled;
 				qcom,cpufreq-memfreq-tbl =
 					<  480000  364800 >,
-					<  940800  518400 >,
+					<  940800  556800 >,
 					< 1190400  710400 >,
 					< 1286400  902400 >,
 					< 1497600 1209600 >,
-					< 1708800 1344000 >,
+					< 1708800 1363200 >,
 					< 2073600 1497600 >,
-					< 2361600 1593600 >,
-					< 2707200 1785600 >;
+					< 2400000 1516800 >,
+					< 2707200 1804800 >;
 			};
 
 			prime {
@@ -3422,14 +2983,14 @@
 				qcom,sampling-enabled;
 				qcom,cpufreq-memfreq-tbl =
 					<  480000  364800 >,
-					<  633600  518400 >,
+					<  633600  556800 >,
 					<  960000  806400 >,
 					< 1324800  998400 >,
 					< 1651200 1209600 >,
-					< 1766400 1344000 >,
-					< 2150400 1497600 >,
-					< 2496000 1593600 >,
-					< 2630400 1785600 >;
+					< 1766400 1363200 >,
+					< 2208000 1497600 >,
+					< 2496000 1516800 >,
+					< 2918400 1804800 >;
 			};
 
 			prime-compute {
@@ -3512,78 +3073,32 @@
 		qcom,count-unit = <0x10000>;
 		qcom,target-dev = <&qcom_ddr_dcvs_hw>;
 	};
-
-	apsscc: syscon@17a80000 {
-		compatible = "syscon";
-		reg = <0x17a80000 0x21000>;
-	};
-
-	mccc: syscon@240ba000 {
-		compatible = "syscon";
-		reg = <0x240ba000 0x800>;
-	};
-
-	debugcc: clock-controller@0 {
-		compatible = "qcom,kera-debugcc";
-		qcom,apsscc = <&apsscc>;
-		qcom,cambistmclkcc = <&cambistmclkcc>;
-		qcom,camcc = <&camcc>;
-		qcom,dispcc = <&dispcc>;
-		qcom,gcc = <&gcc>;
-		qcom,gpucc = <&gpucc>;
-		qcom,tcsrcc = <&tcsrcc>;
-		qcom,videocc = <&videocc>;
-		qcom,mccc = <&mccc>;
-		clocks = <&rpmhcc RPMH_CXO_CLK>,
-			 <&cambistmclkcc 0>,
-			 <&camcc 0>,
-			 <&dispcc 0>,
-			 <&gcc 0>,
-			 <&gpucc 0>,
-			 <&tcsrcc 0>,
-			 <&videocc 0>;
-		clock-names = "xo_clk_src",
-			      "cambistmclkcc",
-			      "camcc",
-			      "dispcc",
-			      "gcc",
-			      "gpucc",
-			      "tcsrcc",
-			      "videocc";
-		#clock-cells = <1>;
-	};
 };
 
 #include "tuna-gdsc.dtsi"
 #include "ipcc-test-no-slpi.dtsi"
 
 &cam_cc_ipe_0_gdsc {
-	clocks = <&gcc GCC_CAMERA_AHB_CLK>;
 	status = "ok";
 };
 
 &cam_cc_ofe_gdsc {
-	clocks = <&gcc GCC_CAMERA_AHB_CLK>;
 	status = "ok";
 };
 
 &cam_cc_tfe_0_gdsc {
-	clocks = <&gcc GCC_CAMERA_AHB_CLK>;
 	status = "ok";
 };
 
 &cam_cc_tfe_1_gdsc {
-	clocks = <&gcc GCC_CAMERA_AHB_CLK>;
 	status = "ok";
 };
 
 &cam_cc_tfe_2_gdsc {
-	clocks = <&gcc GCC_CAMERA_AHB_CLK>;
 	status = "ok";
 };
 
 &cam_cc_titan_top_gdsc {
-	clocks = <&gcc GCC_CAMERA_AHB_CLK>;
 	interconnects = <&mmss_noc MASTER_CAMNOC_HF &mmss_noc SLAVE_MNOC_HF_MEM_NOC>;
 	interconnect-names = "mmnoc";
 	parent-supply = <&VDD_CX_LEVEL>;
@@ -3591,13 +3106,13 @@
 };
 
 &disp_cc_mdss_core_gdsc {
-	clocks = <&gcc GCC_DISP_AHB_CLK>;
 	parent-supply = <&VDD_CX_LEVEL>;
+	status = "ok";
 };
 
 &disp_cc_mdss_core_int2_gdsc {
-	clocks = <&gcc GCC_DISP_AHB_CLK>;
 	parent-supply = <&VDD_CX_LEVEL>;
+	status = "ok";
 };
 
 &gcc_pcie_0_gdsc {
@@ -3612,10 +3127,12 @@
 
 &gcc_pcie_1_gdsc {
 	parent-supply = <&VDD_CX_LEVEL>;
+	status = "ok";
 };
 
 &gcc_pcie_1_phy_gdsc {
 	parent-supply = <&VDD_MX_LEVEL>;
+	status = "ok";
 };
 
 &gcc_ufs_mem_phy_gdsc {
@@ -3643,27 +3160,27 @@
 };
 
 &gpu_cc_cx_gdsc {
+	compatible = "regulator-fixed";
 	reg = <0x3d99110 0x4>;
-	parent-supply = <&VDD_CX_LEVEL>;
-	clocks = <&gcc GCC_GPU_CFG_AHB_CLK>;
-	clock-names = "ahb_clk";
+	status = "ok";
 };
 
 &gpu_cc_gx_gdsc {
-	parent-supply = <&VDD_GFX_LEVEL>;
-	clocks = <&gcc GCC_GPU_CFG_AHB_CLK>;
-	clock-names = "ahb_clk";
+	compatible = "regulator-fixed";
+	status = "ok";
 };
 
 &video_cc_mvs0_gdsc {
 	clocks = <&gcc GCC_VIDEO_AHB_CLK>;
 	clock-names = "ahb_clk";
+	status = "ok";
 };
 
 &video_cc_mvs0c_gdsc {
 	clocks = <&gcc GCC_VIDEO_AHB_CLK>;
 	clock-names = "ahb_clk";
 	parent-supply = <&VDD_CX_LEVEL>;
+	status = "ok";
 };
 
 &reserved_memory {
@@ -3733,7 +3250,6 @@
 #include "kera-pmic-overlay.dtsi"
 #include "kera-usb.dtsi"
 #include "kera-qupv3.dtsi"
-#include "kera-pcie.dtsi"
 #include "kera-thermal.dtsi"
 #include "kera-walt.dtsi"
 #include "msm-rdbg.dtsi"
@@ -3743,12 +3259,10 @@
 };
 
 &qupv3_se3_i2c {
-	status = "ok";
+	status = "disabled";
 	wcd_usbss: wcd939x_i2c@e {
-		status = "disabled";
 		compatible = "qcom,wcd939x-i2c";
 		reg = <0xe>;
 		vdd-usb-cp-supply = <&L7B>;
 	};
 };
-#include "kera-thermal-overlay.dtsi"

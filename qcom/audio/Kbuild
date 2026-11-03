@@ -1,4 +1,3 @@
-DTC_INCLUDE += $(srctree)/../sm6450-modules/qcom/opensource/audio-kernel/include
 
 dtbo-$(CONFIG_ARCH_WAIPIO) += waipio-audio.dtbo \
                  waipio-audio-cdp.dtbo \
@@ -25,11 +24,9 @@ dtbo-$(CONFIG_ARCH_PARROT) += parrot-audio.dtbo \
                  parrot-audio-idp-wcn6750-amoled-rcm.dtbo \
                  parrot-audio-idp-wcn6755-amoled-rcm.dtbo \
                  parrot-audio-idp-wcn6755.dtbo \
-                 parrot-lite-audio-idp.dtbo \
-                 parrot-lite-audio-qrd.dtbo \
                  parrot-audio-qrd.dtbo \
                  parrot-audio-qrd-wcn6750.dtbo \
-                 parrot-audio-qrd-wcn6755.dtbo \
+                 parrot-audio-qrd-wcn6755.dts \
                  parrot-audio-atp.dtbo
 else
 ifeq ($(CONFIG_PAROS_DTB),y)
@@ -47,19 +44,17 @@ dtbo-$(CONFIG_ARCH_PARROT) += parrot-audio.dtbo \
                  parrot-audio-moto-monai-dvt1.dtbo
 endif
 
-ifeq ($(CONFIG_PORTOV_DTB),y)
+ifeq ($(CONFIG_CUSCO_DTB),y)
 dtbo-$(CONFIG_ARCH_PARROT) += parrot-audio.dtbo \
-                 parrot-audio-moto-portov-evb.dtbo
+                 parrot-audio-moto-cusco-evb.dtbo
+dtbo-$(CONFIG_ARCH_PARROT) += parrot-audio.dtbo \
+                 parrot-audio-moto-cuscoi-evb.dtbo \
+                 parrot-audio-moto-cuscoi-noi-evb.dtbo
 endif
 
-ifeq ($(CONFIG_LAMY_DTB),y)
+ifeq ($(CONFIG_PARO_DTB),y)
 dtbo-$(CONFIG_ARCH_PARROT) += parrot-audio.dtbo \
-                 parrot-audio-moto-lamy-evb.dtbo
-endif
-
-ifeq ($(CONFIG_MUMBA_DTB),y)
-dtbo-$(CONFIG_ARCH_PARROT) += parrot-audio.dtbo \
-                 parrot-audio-moto-mumba-evb.dtbo
+                 parrot-audio-moto-paro-evb.dtbo
 endif
 
 endif
